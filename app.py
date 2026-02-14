@@ -17,5 +17,9 @@ def medicamento(nombre):
 def nosotros():
     return "FarmaCarlo es una farmacia dedicada a la venta y control de medicamentos para el cuidado de la salud."
 
+import os
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
+
