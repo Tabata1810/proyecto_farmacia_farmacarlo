@@ -1,25 +1,41 @@
-from flask import Flask
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
+# ------------------------
 # Ruta principal
+# ------------------------
 @app.route('/')
 def inicio():
-    return "Bienvenido a FarmaCarlo – Sistema de Ventas y Control de Medicamentos"
+    return render_template('index.html')
 
-# Ruta dinámica para consultar medicamentos
-@app.route('/medicamento/<nombre>')
-def medicamento(nombre):
-    return f"Medicamento: {nombre} – disponible en FarmaCarlo."
 
-# Ruta adicional para mostrar información del sistema
-@app.route('/nosotros')
-def nosotros():
-    return "FarmaCarlo es una farmacia dedicada a la venta y control de medicamentos para el cuidado de la salud."
+# ------------------------
+# Ruta acerca de
+# ------------------------
+@app.route('/about')
+def about():
+    return render_template('about.html')
 
-import os
 
+# ------------------------
+# Ruta productos
+# ------------------------
+@app.route('/productos')
+def productos():
+    return render_template('productos.html')
+
+
+# ------------------------
+# Ruta dinámica producto
+# ------------------------
+@app.route('/producto/<nombre>')
+def producto(nombre):
+    return f'Producto: {nombre} disponible en Farmacia FarmaCarlo.'
+
+
+# ------------------------
+# Ejecutar aplicación
+# ------------------------
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
-
+    app.run(debug=True)
