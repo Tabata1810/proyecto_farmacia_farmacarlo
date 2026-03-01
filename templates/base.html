@@ -3,29 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <title>Farmacia FarmaCarlo</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f6f9;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #34495e;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            padding: 20px;
+            text-align: center;
+        }
+
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
 
 <header>
     <h1>Farmacia FarmaCarlo</h1>
-    <nav>
-        <a href="/">Inicio</a> |
-        <a href="/about">Acerca de</a> |
-        <a href="/productos">Productos</a>
-    </nav>
 </header>
 
-<hr>
+<nav>
+    <a href="/">Inicio</a> |
+    <a href="/acerca">Acerca de</a> |
+    <a href="/productos">Productos</a>
+</nav>
 
-<!-- Bloque dinámico -->
-{% block content %}
-{% endblock %}
-
-<hr>
+<div class="container">
+    {% block content %}
+    {% endblock %}
+</div>
 
 <footer>
-    <p>Sistema Web - Farmacia FarmaCarlo © 2026</p>
+    Sistema Web - Farmacia FarmaCarlo © 2026
 </footer>
 
 </body>
