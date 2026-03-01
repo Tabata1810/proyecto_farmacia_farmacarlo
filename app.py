@@ -48,6 +48,19 @@ def buscar():
     return render_template('index.html', productos=productos)
 
 
+# 🔹 NUEVAS RUTAS (DEBEN IR FUERA DEL if)
+@app.route("/acerca")
+def acerca():
+    return render_template("acerca.html")
+
+
+@app.route("/productos")
+def productos():
+    productos = inventario.obtener_productos()
+    return render_template("productos.html", productos=productos)
+
+
+# 🔹 Esto SIEMPRE va al final y solo para ejecutar localmente
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
