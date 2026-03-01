@@ -1,43 +1,52 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect
+from database import crear_tabla
+from models.inventario import Inventario
+import os
 
 app = Flask(__name__)
+inventario = Inventario()
 
-# ------------------------
-# Ruta principal
-# ------------------------
+crear_tabla()
+
+
 @app.route('/')
 def inicio():
-    return render_template('index.html')
+    productos = inventario.obtener_productos()
+    return render_template('index.html', productos=productos)
 
 
-# ------------------------
-# Ruta acerca de
-# ------------------------
-@app.route('/about')
-def about():
-    return render_template('about.html')
+@app.route('/agregar', methods=['POST'])
+def agregar():
+    nombre = request.form['nombre']
+    cantidad = request.form['cantidad']
+    precio = request.form['precio']
+
+    inventario.agregar_producto(nombre, cantidad, precio)
+    return redirect('/')
 
 
-# ------------------------
-# Ruta productos
-# ------------------------
-@app.route('/productos')
-def productos():
-    return render_template('productos.html')
+@app.route('/eliminar/<int:id>')
+def eliminar(id):
+    inventario.eliminar_producto(id)
+    return redirect('/')
 
 
-# ------------------------
-# Ruta dinámica producto
-# ------------------------
-@app.route('/producto/<nombre>')
-def producto(nombre):
-    return f'Producto: {nombre} disponible en Farmacia FarmaCarlo.'
+@app.route('/actualizar/<int:id>', methods=['POST'])
+def actualizar(id):
+    nombre = request.form['nombre']
+    cantidad = request.form['cantidad']
+    precio = request.form['precio']
+
+    inventario.actualizar_producto(id, nombre, cantidad, precio)
+    return redirect('/')
 
 
-# ------------------------
-# Ejecutar aplicación
-# ------------------------
-import os
+@app.route('/buscar', methods=['POST'])
+def buscar():
+    nombre = request.form['nombre']
+    productos = inventario.buscar_producto(nombre)
+    return render_template('index.html', productos=productos)
+
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
