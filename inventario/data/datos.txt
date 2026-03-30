@@ -1,3 +1,9 @@
 Producto: Paracetamol | Cantidad: 20 | Precio: 2.50
 Medicamento: Buprex | Stock: 50 | PVP: 4
 Medicamento: Doloxen  | Stock: 100 | PVP: 5.20
+Medicamento: Femen  | Stock: 100 | PVP: 3.90
+Medicamento: Sindlor | Stock: 200 | PVP: 7.40
+Medicamento: Analgan | Stock: 150 | PVP: 14.50
+Medicamento: Apronax | Stock: 75 | PVP: 11.80
+Medicamento: Aspirina | Stock: 100 | PVP: 7.50
+Medicamento: Berifem | Stock: 200 | PVP: 17

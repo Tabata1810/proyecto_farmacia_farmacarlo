@@ -8,5 +8,35 @@
         "nombre": "Doloxen ",
         "cantidad": "100",
         "precio": "5.20"
+    },
+    {
+        "nombre": "Femen ",
+        "cantidad": "100",
+        "precio": "3.90"
+    },
+    {
+        "nombre": "Sindlor",
+        "cantidad": "200",
+        "precio": "7.40"
+    },
+    {
+        "nombre": "Analgan",
+        "cantidad": "150",
+        "precio": "14.50"
+    },
+    {
+        "nombre": "Apronax",
+        "cantidad": "75",
+        "precio": "11.80"
+    },
+    {
+        "nombre": "Aspirina",
+        "cantidad": "100",
+        "precio": "7.50"
+    },
+    {
+        "nombre": "Berifem",
+        "cantidad": "200",
+        "precio": "17"
     }
 ]
