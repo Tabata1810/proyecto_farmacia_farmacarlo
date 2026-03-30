@@ -1,0 +1,3 @@
+Producto: Paracetamol | Cantidad: 20 | Precio: 2.50
+Medicamento: Buprex | Stock: 50 | PVP: 4
+Medicamento: Doloxen  | Stock: 100 | PVP: 5.20

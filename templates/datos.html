@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">Registro de Inventario - Farmacarlo</h2>
+        </div>
+        <div class="card-body">
+            <form action="/datos" method="POST" class="p-3 bg-light border rounded">
+                <div class="mb-3">
+                    <label class="form-label">Nombre del Medicamento</label>
+                    <input type="text" name="nombre" class="form-control" placeholder="Ej: Paracetamol" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Cantidad en Stock</label>
+                    <input type="number" name="cantidad" class="form-control" placeholder="0" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Precio Unitario</label>
+                    <input type="number" step="0.01" name="precio" class="form-control" placeholder="0.00" required>
+                </div>
+                <button type="submit" class="btn btn-success w-100">Guardar en Base de Datos y Archivos</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-6">
+            <div class="p-3 border rounded bg-white">
+                <h4 class="text-primary"><i class="bi bi-database"></i> SQLite (SQLAlchemy)</h4>
+                <hr>
+                <ul class="list-group">
+                    {% for p in productos_db %}
+                    <li class="list-group-item d-flex justify-content-between">
+                        <strong>{{ p.nombre }}</strong>
+                        <span class="badge bg-info text-dark">${{ p.precio }}</span>
+                    </li>
+                    {% else %}
+                    <li class="list-group-item text-muted">No hay datos en la BD</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="p-3 border rounded bg-white">
+                <h4 class="text-warning"><i class="bi bi-filetype-json"></i> Archivo JSON</h4>
+                <hr>
+                <ul class="list-group">
+                    {% for p in productos_json %}
+                    <li class="list-group-item d-flex justify-content-between text-muted">
+                        {{ p.nombre }}
+                        <span>Cant: {{ p.cantidad }}</span>
+                    </li>
+                    {% else %}
+                    <li class="list-group-item text-muted">Archivo JSON vacío</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
