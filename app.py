@@ -47,12 +47,11 @@ def manejar_datos():
         db.session.add(nuevo_prod)
         db.session.commit()
 
-        # 2. Persistencia en MySQL (Puerto 3307)
+        # 2. Persistencia en MySQL (HeidiSQL)
         conexion_mysql = obtener_conexion()
         if conexion_mysql:
             try:
                 cursor = conexion_mysql.cursor()
-                # Query para inserción en la tabla de HeidiSQL
                 query = "INSERT INTO productos_mysql (nombre, cantidad, precio) VALUES (%s, %s, %s)"
                 valores = (nombre_med, int(stock_med), float(precio_med))
                 
@@ -64,12 +63,12 @@ def manejar_datos():
             except Exception as e:
                 print(f"Error en la transacción MySQL: {e}")
 
-        # 3. Registro en archivos planos (TXT, JSON, CSV)
-        # Escritura en archivo de texto
+        # 3. Registro en archivos planos
+        # Guardar en TXT
         with open(ARCHIVO_TXT, 'a', encoding='utf-8') as f:
             f.write(f"{nombre_med} | {stock_med} | {precio_med}\n")
 
-        # Actualización de archivo JSON
+        # Guardar en JSON
         datos_json = []
         if os.path.exists(ARCHIVO_JSON):
             try:
@@ -82,19 +81,19 @@ def manejar_datos():
         with open(ARCHIVO_JSON, 'w', encoding='utf-8') as f_json:
             json.dump(datos_json, f_json, indent=4)
 
-        # Escritura en CSV para Excel
+        # Guardar en CSV
         with open(ARCHIVO_CSV, 'a', newline='', encoding='utf-8') as f_csv:
             writer = csv.writer(f_csv)
             writer.writerow([nombre_med, stock_med, precio_med])
 
         return redirect(url_for('manejar_datos'))
 
-    # --- Recuperación de datos para la vista ---
+    # --- RECUPERACIÓN DE DATOS PARA MOSTRAR EN LA WEB ---
     
-    # Datos desde SQLite (SQLAlchemy)
+    # Lista 1: SQLite
     res_sqlite = Producto.query.all()
     
-    # Datos desde MySQL
+    # Lista 2: MySQL (HeidiSQL)
     res_mysql = []
     con = obtener_conexion()
     if con:
@@ -106,10 +105,22 @@ def manejar_datos():
             con.close()
         except Exception as e:
             print(f"Error al recuperar datos MySQL: {e}")
+
+    # Lista 3: ESTA ES LA PARTE QUE HACEMOS PARA EL JSON
+    res_json = []
+    if os.path.exists(ARCHIVO_JSON):
+        try:
+            with open(ARCHIVO_JSON, 'r', encoding='utf-8') as f:
+                res_json = json.load(f)
+        except Exception as e:
+            print(f"Error al leer el archivo JSON: {e}")
+            res_json = []
     
+    # Se envían todas las listas al archivo HTML
     return render_template('datos.html', 
                             productos_db=res_sqlite, 
-                            productos_mysql=res_mysql)
+                            productos_mysql=res_mysql,
+                            productos_json=res_json)
 
 if __name__ == '__main__':
     app.run(debug=True)

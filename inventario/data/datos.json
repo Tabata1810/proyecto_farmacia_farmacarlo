@@ -1,55 +1,5 @@
 [
     {
-        "nombre": "Buprex",
-        "cantidad": "50",
-        "precio": "4"
-    },
-    {
-        "nombre": "Doloxen ",
-        "cantidad": "100",
-        "precio": "5.20"
-    },
-    {
-        "nombre": "Femen ",
-        "cantidad": "100",
-        "precio": "3.90"
-    },
-    {
-        "nombre": "Sindlor",
-        "cantidad": "200",
-        "precio": "7.40"
-    },
-    {
-        "nombre": "Analgan",
-        "cantidad": "150",
-        "precio": "14.50"
-    },
-    {
-        "nombre": "Apronax",
-        "cantidad": "75",
-        "precio": "11.80"
-    },
-    {
-        "nombre": "Aspirina",
-        "cantidad": "100",
-        "precio": "7.50"
-    },
-    {
-        "nombre": "Berifem",
-        "cantidad": "200",
-        "precio": "17"
-    },
-    {
-        "nombre": "Bonfiest",
-        "cantidad": "60",
-        "precio": "14.40"
-    },
-    {
-        "nombre": "Migraflash",
-        "cantidad": "110",
-        "precio": "4.90"
-    },
-    {
         "nombre": "Femen ",
         "cantidad": "30",
         "precio": "4.20"
@@ -175,7 +125,7 @@
         "precio": "8.10"
     },
     {
-        "nombre": "Bilidren Enzim\u00e1tico",
+        "nombre": "Bilidren Enzimático",
         "cantidad": "17",
         "precio": "10.50"
     },
