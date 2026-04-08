@@ -38,5 +38,165 @@
         "nombre": "Berifem",
         "cantidad": "200",
         "precio": "17"
+    },
+    {
+        "nombre": "Bonfiest",
+        "cantidad": "60",
+        "precio": "14.40"
+    },
+    {
+        "nombre": "Migraflash",
+        "cantidad": "110",
+        "precio": "4.90"
+    },
+    {
+        "nombre": "Femen ",
+        "cantidad": "30",
+        "precio": "4.20"
+    },
+    {
+        "nombre": "Migraflash",
+        "cantidad": "15",
+        "precio": "5"
+    },
+    {
+        "nombre": "Benzo derma",
+        "cantidad": "15",
+        "precio": "17.50"
+    },
+    {
+        "nombre": "Femen ",
+        "cantidad": "15",
+        "precio": "4.20"
+    },
+    {
+        "nombre": "Migraflash",
+        "cantidad": "23",
+        "precio": "5"
+    },
+    {
+        "nombre": "Diabaid",
+        "cantidad": "12",
+        "precio": "21"
+    },
+    {
+        "nombre": "Fanter Comprimidos",
+        "cantidad": "10",
+        "precio": "42"
+    },
+    {
+        "nombre": "Acteric Comprimidos",
+        "cantidad": "20",
+        "precio": "9.10"
+    },
+    {
+        "nombre": "Algivex",
+        "cantidad": "18",
+        "precio": "8.40"
+    },
+    {
+        "nombre": "Alfrom Comprimidos",
+        "cantidad": "11",
+        "precio": "22.40"
+    },
+    {
+        "nombre": "Analgan Rapid",
+        "cantidad": "18",
+        "precio": "14.50"
+    },
+    {
+        "nombre": "Apronax Capsulas Liquidas ",
+        "cantidad": "19",
+        "precio": "27"
+    },
+    {
+        "nombre": "Apronax Tabletas ",
+        "cantidad": "22",
+        "precio": "11"
+    },
+    {
+        "nombre": "Artrichine",
+        "cantidad": "14",
+        "precio": "1.50"
+    },
+    {
+        "nombre": "Astros",
+        "cantidad": "10",
+        "precio": "22.20"
+    },
+    {
+        "nombre": "Astrosamin",
+        "cantidad": "15",
+        "precio": "22.20"
+    },
+    {
+        "nombre": "Aspirina Advance",
+        "cantidad": "12",
+        "precio": "12"
+    },
+    {
+        "nombre": "Beralmat",
+        "cantidad": "14",
+        "precio": "9.20"
+    },
+    {
+        "nombre": "Berifem",
+        "cantidad": "11",
+        "precio": "3.40"
+    },
+    {
+        "nombre": "Bonfiest",
+        "cantidad": "16",
+        "precio": "14.40"
+    },
+    {
+        "nombre": "Cartidol Plus",
+        "cantidad": "10",
+        "precio": "23.10"
+    },
+    {
+        "nombre": "Cefanorm",
+        "cantidad": "12",
+        "precio": "24"
+    },
+    {
+        "nombre": "Celeridan ",
+        "cantidad": "20",
+        "precio": "15.40"
+    },
+    {
+        "nombre": "Acrofibrato",
+        "cantidad": "22",
+        "precio": "17.10"
+    },
+    {
+        "nombre": "Aldactone",
+        "cantidad": "12",
+        "precio": "8.10"
+    },
+    {
+        "nombre": "Bilidren Enzim\u00e1tico",
+        "cantidad": "17",
+        "precio": "10.50"
+    },
+    {
+        "nombre": "Buscapina",
+        "cantidad": "8",
+        "precio": "8"
+    },
+    {
+        "nombre": "Digesta",
+        "cantidad": "10",
+        "precio": "10.60"
+    },
+    {
+        "nombre": "Digestotal Biliar",
+        "cantidad": "12",
+        "precio": "22.20"
+    },
+    {
+        "nombre": "Qg5",
+        "cantidad": "7",
+        "precio": "23.40"
     }
 ]
