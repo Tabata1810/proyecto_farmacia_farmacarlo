@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, send_file
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 import os
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from Conexion.conexion import obtener_conexion 
 from services.producto_service import ProductoService
@@ -58,15 +59,17 @@ def acerca():
 def login():
     if request.method == 'POST':
         email = request.form['email']
-        password = request.form['password']
+        password_escrita = request.form['password']
+
         conn = obtener_conexion()
         if conn:
             cursor = conn.cursor(dictionary=True)
-            cursor.execute("SELECT * FROM usuarios WHERE email = %s AND password = %s", (email, password))
+            cursor.execute("SELECT * FROM usuarios WHERE email =  %s", (email,))
             user_data = cursor.fetchone()
             cursor.close()
             conn.close()
-            if user_data:
+
+            if user_data and check_password_hash(user_data['password'], password_escrita):
                 user_obj = Usuario(user_data['id_usuario'], user_data['nombre'], user_data['email'])
                 login_user(user_obj)
                 return redirect(url_for('home'))
@@ -79,20 +82,26 @@ def registro():
     if request.method == 'POST':
         nombre = request.form['nombre']
         email = request.form['email']
-        password = request.form['password']
+        password_plana = request.form['password']
+
+        password_encriptada = generate_password_hash(password_plana)
+
         conn = obtener_conexion()
         if conn:
-            cursor = conn.cursor()
             try:
-                cursor.execute("INSERT INTO usuarios (nombre, email, password) VALUES (%s,%s,%s)", (nombre, email, password))
+                cursor = conn.cursor()
+                cursor.execute("INSERT INTO usuarios (nombre, email, password) VALUES (%s,%s,%s)", (nombre, email, password_encriptada))
                 conn.commit()
-                flash("¡Cuenta creada! Ya puedes iniciar sesión", "success")
+                flash("✅ Registro exitoso, ya puedes iniciar sesión", "success")
                 return redirect(url_for('login'))
-            except:
-                flash("El correo ya está registrado o hubo un error", "danger")
+            except Exception as e:
+                flash("❌ El correo ya está registrado o hubo un error", "danger")
             finally:
-                cursor.close()
-                conn.close()
+                if cursor:
+                    cursor.close()
+                if conn:
+                    conn.close()
+        
     return render_template('registro.html')
 
 @app.route('/logout')
