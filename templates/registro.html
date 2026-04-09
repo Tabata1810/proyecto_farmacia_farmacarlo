@@ -2,37 +2,166 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro - Farmacarlo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --azul-bebe: #89CFF0;
+            --celeste-bebe: #E1F5FE;
+            --blanco-hueso: #F9F9F7;
+            --dorado: #D4AF37;
+            --texto-azul: #5A7D9A;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--celeste-bebe) 0%, var(--blanco-hueso) 100%);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+        }
+
+        .register-card {
+            background: white;
+            padding: 50px;
+            border-radius: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+            border: 2px solid white;
+            width: 100%;
+            max-width: 800px; /* Más ancho para el diseño horizontal */
+        }
+
+        .register-title {
+            color: var(--texto-azul);
+            font-weight: 800;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Estilo de grupos horizontales (como en Clientes) */
+        .input-group-custom {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .input-group-custom label {
+            width: 250px;
+            text-align: right;
+            font-weight: 700;
+            color: var(--texto-azul);
+            font-size: 1.1rem;
+            padding-right: 30px;
+            margin: 0;
+        }
+
+        .custom-input {
+            width: 100%;
+            height: 55px;
+            border: 2px solid var(--celeste-bebe);
+            border-radius: 18px;
+            background-color: #fdfdfd;
+            padding: 0 25px;
+            font-size: 1.1rem;
+            transition: 0.3s;
+        }
+
+        .custom-input:focus {
+            border-color: var(--dorado);
+            outline: none;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+        }
+
+        .btn-register {
+            background-color: var(--texto-azul);
+            color: white;
+            width: 100%;
+            max-width: 400px;
+            height: 65px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 1.3rem;
+            text-transform: uppercase;
+            border: none;
+            transition: 0.4s;
+            display: block;
+            margin: 40px auto 20px auto;
+            box-shadow: 0 10px 20px rgba(90, 125, 154, 0.2);
+        }
+
+        .btn-register:hover {
+            background-color: var(--dorado);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(212, 175, 55, 0.3);
+        }
+
+        .login-link {
+            text-align: center;
+            color: #888;
+            font-weight: 600;
+        }
+
+        .login-link a {
+            color: var(--dorado);
+            text-decoration: none;
+            border-bottom: 2px solid transparent;
+            transition: 0.3s;
+        }
+
+        .login-link a:hover {
+            border-bottom: 2px solid var(--dorado);
+        }
+
+        /* Alertas flash */
+        .alert {
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+    </style>
 </head>
-<body class="bg-light">
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-4">
-                <div class="card shadow">
-                    <div class="card-body">
-                        <h3 class="text-center">Crear Cuenta</h3>
-                        <form method="POST">
-                            <div class="mb-3">
-                                <label>Nombre Completo</label>
-                                <input type="text" name="nombre" class="form-control" required>
-                            </div>
-                            <div class="mb-3">
-                                <label>Correo Electrónico</label>
-                                <input type="email" name="email" class="form-control" required>
-                            </div>
-                            <div class="mb-3">
-                                <label>Contraseña</label>
-                                <input type="password" name="password" class="form-control" required>
-                            </div>
-                            <button type="submit" class="btn btn-success w-100">Registrarme</button>
-                        </form>
-                        <hr>
-                        <p class="text-center">¿Ya tienes cuenta? <a href="{{ url_for('login') }}">Inicia sesión</a></p>
-                    </div>
-                </div>
+<body>
+
+    <div class="register-card">
+        <h1 class="register-title">Unirse a FarmaCarlo</h1>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <form method="POST">
+            <div class="input-group-custom">
+                <label>Nombre Completo</label>
+                <input type="text" name="nombre" class="custom-input" placeholder="Ej. Juan Pérez" required>
             </div>
-        </div>
+
+            <div class="input-group-custom">
+                <label>Correo Electrónico</label>
+                <input type="email" name="email" class="custom-input" placeholder="usuario@farmacarlo.com" required>
+            </div>
+
+            <div class="input-group-custom">
+                <label>Contraseña</label>
+                <input type="password" name="password" class="custom-input" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="btn-register">Crear Cuenta</button>
+        </form>
+
+        <p class="login-link">
+            ¿Ya eres parte del equipo? <a href="{{ url_for('login') }}">Inicia sesión aquí</a>
+        </p>
     </div>
+
 </body>
 </html>

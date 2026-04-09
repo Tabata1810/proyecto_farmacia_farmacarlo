@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    .main-wrapper {
+        padding: 60px 20px;
+        min-height: 80vh;
+        background-color: #fcfdfe;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+    }
+
+    .edit-card {
+        background: white;
+        border-radius: 40px;
+        border: 2px solid #ffebee; /* Un tono rosado muy suave como tu imagen */
+        box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+        padding: 40px;
+        width: 100%;
+        max-width: 700px;
+    }
+
+    .edit-title {
+        color: #8d6e63; /* Color café suave de tu imagen */
+        font-weight: 700;
+        font-size: 2rem;
+        text-align: center;
+        margin-bottom: 30px;
+        text-transform: uppercase;
+    }
+
+    .label-edit {
+        color: #8d6e63;
+        font-weight: 600;
+        margin-bottom: 8px;
+        display: block;
+        font-size: 0.95rem;
+    }
+
+    .input-edit {
+        width: 100%;
+        height: 50px;
+        border-radius: 20px;
+        border: 1.5px solid #fce4ec;
+        padding: 0 20px;
+        margin-bottom: 20px;
+        background-color: #fff;
+        transition: 0.3s;
+    }
+
+    .input-edit:focus {
+        outline: none;
+        border-color: #A2C2E1;
+        box-shadow: 0 0 8px rgba(162, 194, 225, 0.3);
+    }
+
+    .btn-update {
+        background-color: #A2C2E1; /* Azul pastel de la imagen */
+        color: white;
+        width: 100%;
+        height: 55px;
+        border-radius: 20px;
+        border: none;
+        font-weight: 700;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        margin-top: 10px;
+        transition: 0.3s;
+    }
+
+    .btn-update:hover {
+        background-color: #8eb0cf;
+        transform: translateY(-2px);
+    }
+
+    .cancel-link {
+        display: block;
+        text-align: center;
+        margin-top: 15px;
+        color: #aaa;
+        text-decoration: underline;
+        font-size: 0.9rem;
+    }
+</style>
+
+<div class="main-wrapper">
+    <div class="edit-card">
+        <h2 class="edit-title">✍️ EDITAR INFORMACIÓN</h2>
+        
+        <form method="POST">
+            <div class="row">
+                <div class="col-12">
+                    <label class="label-edit">Nombre del Cliente</label>
+                    <input type="text" name="nombre" class="input-edit" value="{{ cliente.nombre }}" required>
+                </div>
+                
+                <div class="col-12">
+                    <label class="label-edit">Cédula de Identidad</label>
+                    <input type="text" name="cedula" class="input-edit" value="{{ cliente.cedula }}" required 
+                           oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                </div>
+                
+                <div class="col-md-6">
+                    <label class="label-edit">Teléfono</label>
+                    <input type="text" name="telefono" class="input-edit" value="{{ cliente.telefono }}" required
+                           oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                </div>
+                
+                <div class="col-md-6">
+                    <label class="label-edit">Correo</label>
+                    <input type="email" name="correo" class="input-edit" value="{{ cliente.correo }}">
+                </div>
+            </div>
+
+            <button type="submit" class="btn-update">ACTUALIZAR DATOS</button>
+            <a href="/clientes" class="cancel-link">Cancelar cambios</a>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

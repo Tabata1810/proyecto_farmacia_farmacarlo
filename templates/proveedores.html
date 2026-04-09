@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+
+.form-registro-clean{
+background:white;
+border-radius:20px;
+padding:30px;
+border:1px solid #e0e6ed;
+box-shadow:0 4px 12px rgba(0,0,0,0.05);
+}
+
+.card-proveedor{
+background:white;
+border-radius:15px;
+border:1px solid #eef2f7;
+padding:20px;
+height:100%;
+box-shadow:0 4px 10px rgba(0,0,0,0.05);
+transition:0.2s;
+}
+
+.card-proveedor:hover{
+transform:translateY(-3px);
+}
+
+.empresa-titulo{
+color:#0d6efd;
+font-weight:bold;
+font-size:1.1rem;
+margin-bottom:3px;
+}
+
+.contacto-sub{
+color:#6c757d;
+font-weight:600;
+margin-bottom:12px;
+display:block;
+}
+
+.acciones{
+margin-top:12px;
+display:flex;
+gap:8px;
+}
+
+</style>
+
+
+<div class="container py-4">
+
+<h3 class="text-center mb-4">
+<i class="bi bi-truck me-2"></i>
+Gestión de Proveedores
+</h3>
+
+
+<!-- FORMULARIO -->
+
+<div class="form-registro-clean mb-5">
+
+<h5 class="mb-3">
+<i class="bi bi-plus-circle me-2"></i>
+Registrar Nuevo Proveedor
+</h5>
+
+<form action="{{ url_for('manejar_proveedores') }}" method="POST" class="row g-3">
+
+<div class="col-md-4">
+<label class="small fw-bold">Empresa / Laboratorio</label>
+<input type="text" name="empresa" class="form-control" placeholder="Ej: Bayer, Pfizer..." required>
+</div>
+
+<div class="col-md-4">
+<label class="small fw-bold">Nombre del Contacto</label>
+<input type="text" name="nombre" class="form-control" placeholder="Nombre del vendedor">
+</div>
+
+<div class="col-md-4">
+<label class="small fw-bold">Teléfono</label>
+<input type="text" name="telefono" class="form-control"
+oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+placeholder="0999999999">
+</div>
+
+<div class="col-md-6">
+<label class="small fw-bold">Correo Electrónico</label>
+<input type="email" name="correo" class="form-control" placeholder="correo@empresa.com">
+</div>
+
+<div class="col-md-6">
+<label class="small fw-bold">Dirección</label>
+<input type="text" name="direccion" class="form-control" placeholder="Dirección completa">
+</div>
+
+<div class="col-12 text-end">
+<button type="submit" class="btn btn-primary">
+<i class="bi bi-save me-1"></i>
+Guardar Proveedor
+</button>
+</div>
+
+</form>
+
+</div>
+
+
+<!-- LISTA DE PROVEEDORES -->
+
+<div class="row g-3">
+
+{% for prov in lista_proveedores %}
+
+<div class="col-md-4">
+
+<div class="card-proveedor">
+
+<div class="empresa-titulo">
+{{ prov.nombre_empresa or 'Sin empresa' }}
+</div>
+
+<small class="contacto-sub">
+<i class="bi bi-person me-1"></i>
+{{ prov.contacto_vendedor or 'Sin contacto' }}
+</small>
+
+<hr>
+
+<div class="small text-muted">
+
+<p class="mb-1">
+<i class="bi bi-telephone me-2"></i>
+{{ prov.telefono_proveedor or 'N/A' }}
+</p>
+
+<p class="mb-1">
+<i class="bi bi-envelope me-2"></i>
+{{ prov.correo or 'N/A' }}
+</p>
+
+<p class="mb-2">
+<i class="bi bi-geo-alt me-2"></i>
+{{ prov.direccion or 'N/A' }}
+</p>
+
+</div>
+
+
+<!-- BOTONES (CORREGIDOS) -->
+
+<div class="acciones">
+
+<a href="{{ url_for('editar_proveedor', id=prov.id_proveedor) }}" class="btn btn-sm btn-warning">
+<i class="bi bi-pencil"></i>
+Editar
+</a>
+
+<a href="{{ url_for('eliminar_proveedor', id=prov.id_proveedor) }}"
+class="btn btn-sm btn-danger"
+onclick="return confirm('¿Eliminar este proveedor?')">
+<i class="bi bi-trash"></i>
+Eliminar
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+</div>
+
+{% endblock %}

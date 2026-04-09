@@ -1,9 +1,135 @@
 {% extends "base.html" %}
-
 {% block content %}
-<h2>Acerca de</h2>
-<p>
-El sistema web Farmacia FarmaCarlo permite gestionar el inventario
-de productos usando Flask y SQLite.
-</p>
+
+<style>
+    /* Botón de volver con las "rayitas" o icono de regreso */
+    .btn-regresar {
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none;
+        color: #1a2a40;
+        font-weight: 600;
+        transition: 0.3s;
+        margin-bottom: 20px;
+    }
+    .btn-regresar:hover {
+        color: #b8860b;
+        transform: translateX(-5px);
+    }
+
+    /* Tarjeta Única Premium */
+    .panel-info-unico {
+        background: white;
+        border-radius: 25px;
+        border: 1px solid #e0e6ed;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        overflow: hidden;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .header-panel {
+        background: #1a2a40;
+        color: white;
+        padding: 30px;
+        text-align: center;
+    }
+
+    .cuerpo-panel {
+        padding: 40px;
+    }
+
+    .item-info {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 25px;
+    }
+
+    .item-info:last-child {
+        margin-bottom: 0;
+    }
+
+    .icon-box {
+        min-width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 20px;
+        background: rgba(184, 134, 11, 0.1);
+        color: #b8860b;
+        font-size: 1.5rem;
+    }
+
+    .texto-info h6 {
+        margin-bottom: 5px;
+        font-weight: 700;
+        color: #1a2a40;
+    }
+
+    .texto-info p {
+        margin-bottom: 0;
+        font-size: 0.95rem;
+        color: #6c757d;
+    }
+</style>
+
+<div class="container py-4">
+    
+    <a href="{{ url_for('home') }}" class="btn-regresar">
+        <i class="bi bi-arrow-left-short fs-3"></i> 
+        <span>Regresar al Inicio</span>
+    </a>
+
+    <div class="panel-info-unico">
+        <div class="header-panel">
+            <h4 class="mb-0">Manual de Gestión Integral</h4>
+            <p class="small opacity-75 mb-0 mt-2">FarmaCarlo: Eficiencia, Control y Seguridad en un solo lugar</p>
+        </div>
+
+        <div class="cuerpo-panel">
+            <div class="row">
+                <div class="col-md-12">
+                    
+                    <div class="item-info">
+                        <div class="icon-box shadow-sm">
+                            <i class="bi bi-box-seam"></i>
+                        </div>
+                        <div class="texto-info">
+                            <h6>Control de Inventario Inteligente</h6>
+                            <p>Supervisa el stock en tiempo real, organiza categorías y gestiona proveedores con total precisión para garantizar la disponibilidad de medicamentos.</p>
+                        </div>
+                    </div>
+
+                    <hr class="my-4" style="opacity: 0.1;">
+
+                    <div class="item-info">
+                        <div class="icon-box shadow-sm">
+                            <i class="bi bi-people"></i>
+                        </div>
+                        <div class="texto-info">
+                            <h6>Gestión de Clientes y Fidelización</h6>
+                            <p>Base de datos centralizada para un registro rápido de ventas y una atención personalizada que fortalece la confianza de tus pacientes.</p>
+                        </div>
+                    </div>
+
+                    <hr class="my-4" style="opacity: 0.1;">
+
+                    <div class="item-info">
+                        <div class="icon-box shadow-sm">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <div class="texto-info">
+                            <h6>Protección de Datos y Reportes</h6>
+                            <p>Seguridad avanzada en el acceso a la plataforma y generación de reportes estratégicos para la toma de decisiones financieras en el negocio.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}

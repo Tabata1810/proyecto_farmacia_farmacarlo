@@ -1,10 +1,172 @@
-<h2>Iniciar Sesión - Farmacarlo</h2>
-<form method="POST">
-    <input type="email" name="email" placeholder="Correo electrónico" required><br><br>
-    <input type="password" name="password" placeholder="Contraseña" required><br><br>
-    <button type="submit">Entrar al Sistema</button>
-</form>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmaCarlo | Login Premium</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --azul-bebe: #89CFF0;
+            --celeste-bebe: #E1F5FE;
+            --blanco-hueso: #F9F9F7;
+            --dorado: #D4AF37;
+            --texto-azul: #5A7D9A;
+        }
 
-<p class="text-center mt-3">
-    ¿No tienes cuenta? <a href="{{ url_for('registro') }}">Regístrate aquí</a>
-</p>
+        body {
+            background: linear-gradient(135deg, var(--blanco-hueso) 0%, var(--celeste-bebe) 100%);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 40px;
+            padding: 50px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 25px 50px rgba(137, 207, 240, 0.2);
+            border: 2px solid white;
+            text-align: center;
+        }
+
+        .logo-area {
+            font-size: 4rem;
+            color: var(--dorado);
+            margin-bottom: 10px;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+        }
+
+        .brand-name {
+            color: var(--texto-azul);
+            font-weight: 800;
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+            letter-spacing: -1px;
+        }
+
+        .tagline {
+            color: var(--azul-bebe);
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 40px;
+        }
+
+        /* Campos de entrada */
+        .form-control {
+            border-radius: 18px;
+            padding: 15px 20px;
+            border: 2px solid var(--celeste-bebe);
+            background-color: #fdfdfd;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--dorado);
+            box-shadow: 0 0 12px rgba(212, 175, 55, 0.15);
+            outline: none;
+        }
+
+        /* Botón Dorado/Azul */
+        .btn-access {
+            background: linear-gradient(135deg, var(--texto-azul), var(--azul-bebe));
+            border: none;
+            border-radius: 18px;
+            padding: 16px;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            width: 100%;
+            margin-top: 15px;
+            box-shadow: 0 10px 20px rgba(90, 125, 154, 0.2);
+            transition: 0.4s;
+            letter-spacing: 1px;
+        }
+
+        .btn-access:hover {
+            background: var(--dorado);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(212, 175, 55, 0.3);
+            color: white;
+        }
+
+        .bottom-text {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        .bottom-text a {
+            color: var(--dorado);
+            text-decoration: none;
+            font-weight: 700;
+            border-bottom: 2px solid transparent;
+            transition: 0.3s;
+        }
+
+        .bottom-text a:hover {
+            border-bottom: 2px solid var(--dorado);
+        }
+
+        /* Alertas para errores de login */
+        .alert {
+            border-radius: 15px;
+            font-size: 0.85rem;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <div class="logo-area">
+            <i class="bi bi-shield-plus"></i>
+        </div>
+        
+        <h2 class="brand-name">FarmaCarlo</h2>
+        <p class="tagline">Gestión de Salud</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <form method="POST">
+            <div class="mb-3 text-start">
+                <label class="small fw-bold ms-2 mb-1" style="color: var(--texto-azul);">CORREO PROFESIONAL</label>
+                <input type="email" name="email" class="form-control" placeholder="nombre@farmacarlo.com" required>
+            </div>
+
+            <div class="mb-4 text-start">
+                <label class="small fw-bold ms-2 mb-1" style="color: var(--texto-azul);">CONTRASEÑA</label>
+                <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="btn btn-access">
+                INGRESAR AL PANEL
+            </button>
+        </form>
+
+        <div class="bottom-text">
+            ¿Nuevo en el equipo? <a href="{{ url_for('registro') }}">Crea una cuenta</a>
+        </div>
+    </div>
+
+</body>
+</html>

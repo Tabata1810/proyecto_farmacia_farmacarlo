@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    :root {
+        --azul-bebe: #E3F2FD;
+        --celeste-bebe: #E1F5FE;
+        --blanco-hueso: #F9F9F7;
+        --dorado: #D4AF37;
+        --texto-azul: #5A7D9A;
+    }
+
+    /* BIENVENIDO */
+    .welcome-container {
+        text-align: center;
+        margin-top: 40px;
+        margin-bottom: 40px;
+    }
+
+    .welcome-title {
+        font-size: 3.5rem;
+        font-weight: 800;
+        color: var(--texto-azul);
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        text-shadow: 2px 2px 0px white;
+    }
+
+    .section-label {
+        color: var(--dorado);
+        font-weight: 700;
+        font-size: 1.5rem;
+        margin-bottom: 30px;
+        display: block;
+        text-transform: uppercase;
+        text-align: center;
+    }
+
+    /* GRID DE TARJETAS */
+    .grid-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 25px;
+        padding: 20px;
+    }
+
+    /* TARJETAS ESTILO PREMIUM */
+    .card-baby {
+        background: white;
+        border: 2px solid var(--celeste-bebe);
+        border-radius: 30px;
+        padding: 40px 15px;
+        text-align: center;
+        text-decoration: none !important;
+        transition: all 0.4s ease;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .card-baby:hover {
+        transform: translateY(-10px);
+        border-color: var(--dorado);
+        box-shadow: 0 15px 30px rgba(212, 175, 55, 0.2);
+    }
+
+    .baby-icon {
+        width: 80px;
+        height: 80px;
+        background: var(--celeste-bebe);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        font-size: 2.5rem;
+        transition: 0.3s;
+    }
+
+    .card-baby:hover .baby-icon {
+        background: var(--dorado);
+        color: white !important;
+    }
+
+    .card-baby span {
+        color: var(--texto-azul);
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 1.1rem;
+    }
+
+    /* BARRITAS DECORATIVAS DORADAS */
+    .line-gold { border-bottom: 6px solid var(--dorado); }
+</style>
+
+<div class="welcome-container">
+    <h1 class="welcome-title">Panel Principal</h1>
+    <p class="text-muted">Bienvenido de nuevo, <strong>{{ usuario.nombre }}</strong></p>
+</div>
+
+<div class="main-content">
+    <span class="section-label">Gestión de Farmacia</span>
+    
+    <div class="grid-cards">
+        <a href="{{ url_for('manejar_datos') }}" class="card-baby line-gold">
+            <div class="baby-icon" style="color: var(--texto-azul);">
+                <i class="bi bi-capsule"></i>
+            </div>
+            <span>Inventario</span>
+        </a>
+
+        <a href="{{ url_for('manejar_clientes') }}" class="card-baby line-gold">
+            <div class="baby-icon" style="color: var(--texto-azul);">
+                <i class="bi bi-people"></i>
+            </div>
+            <span>Clientes</span>
+        </a>
+
+        <a href="{{ url_for('manejar_proveedores') }}" class="card-baby line-gold">
+            <div class="baby-icon" style="color: var(--texto-azul);">
+                <i class="bi bi-truck"></i>
+            </div>
+            <span>Proveedores</span>
+        </a>
+
+        <a href="{{ url_for('manejar_ventas') }}" class="card-baby line-gold">
+            <div class="baby-icon" style="color: var(--texto-azul);">
+                <i class="bi bi-cart-check"></i>
+            </div>
+            <span>Ventas</span>
+        </a>
+
+        <a href="{{ url_for('reporte_pdf') }}" class="card-baby line-gold">
+            <div class="baby-icon" style="color: var(--texto-azul);">
+                <i class="bi bi-file-earmark-pdf"></i>
+            </div>
+            <span>Reportes PDF</span>
+        </a>
+
+        <a href="{{ url_for('acerca') }}" class="card-baby line-gold">
+            <div class="baby-icon" style="color: var(--texto-azul);">
+                <i class="bi bi-info-circle"></i>
+            </div>
+            <span>Acerca de</span>
+        </a>
+    </div>
+</div>
+
+{% endblock %}

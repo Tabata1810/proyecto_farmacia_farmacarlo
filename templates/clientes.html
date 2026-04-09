@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    .form-registro-clean {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        border: 1px solid #e0e6ed;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+    .card-cliente {
+        background: white;
+        border-radius: 15px;
+        border: 1px solid #eef2f7;
+        transition: 0.3s;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    .card-cliente:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+    
+    .btn-registrar {
+        background: var(--azul-elegante);
+        color: white;
+        border-radius: 10px;
+        font-weight: bold;
+        height: 100%;
+    }
+
+    .modal-content { border-radius: 20px; border: none; }
+    .modal-header { background-color: var(--azul-elegante); color: white; border-radius: 20px 20px 0 0; }
+</style>
+
+<div class="container py-4">
+    <h3 class="text-center mb-4" style="color: var(--azul-elegante); font-family: 'Playfair Display', serif;">
+        <i class="bi bi-people-fill me-2"></i>Gestión de Clientes
+    </h3>
+
+    <div class="row justify-content-center mb-5">
+        <div class="col-lg-12">
+            <div class="form-registro-clean">
+                <form action="{{ url_for('manejar_clientes') }}" method="POST" class="row g-3 align-items-end">
+                    <div class="col-md-3">
+                        <label class="small fw-bold text-muted">Nombre del Cliente</label>
+                        <input type="text" name="nombre" class="form-control" placeholder="Ej: Juan Pérez" required>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="small fw-bold text-muted">Cédula / ID</label>
+                        <input type="text" name="cedula" class="form-control"  
+                               oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="small fw-bold text-muted">Teléfono</label>
+                        <input type="text" name="telefono" class="form-control"
+                               oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="small fw-bold text-muted">Correo Electrónico</label>
+                        <input type="email" name="correo" class="form-control" placeholder="cliente@correo.com">
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-registrar w-100">Registrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4 justify-content-center">
+        <div class="col-md-5">
+            <div class="input-group shadow-sm" style="border-radius: 50px; overflow: hidden;">
+                <span class="input-group-text bg-white border-0"><i class="bi bi-search"></i></span>
+                <input type="text" id="busquedaCliente" class="form-control border-0" placeholder="Buscar por nombre o cédula..." onkeyup="filtrarClientes()">
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3" id="listaClientes">
+        {% for cliente in lista_clientes %}
+        <div class="col-md-4 item-cliente">
+            <div class="card-cliente p-3">
+                <div class="d-flex justify-content-between">
+                    <h6 class="fw-bold text-capitalize mb-0 nombre-cliente">{{ cliente.nombre }}</h6>
+                    <span class="badge bg-light text-dark border">ID: <span class="cedula-cliente">{{ cliente.cedula }}</span></span>
+                </div>
+                <hr class="my-2">
+                <div class="small text-muted mb-3">
+                    <p class="mb-1"><i class="bi bi-telephone me-2"></i>{{ cliente.telefono or 'S/N' }}</p>
+                    <p class="mb-0"><i class="bi bi-envelope me-2"></i>{{ cliente.correo or 'S/E' }}</p>
+                </div>
+                <div class="d-flex justify-content-end gap-2 mt-auto">
+                    <button type="button" class="btn btn-sm btn-outline-primary border-0" data-bs-toggle="modal" data-bs-target="#modalEditar{{ cliente.id_cliente }}">
+                        <i class="bi bi-pencil"></i>
+                    </button>
+                    <a href="{{ url_for('eliminar_cliente', id=cliente.id_cliente) }}" class="btn btn-sm btn-outline-danger border-0" onclick="return confirm('¿Eliminar a este cliente?')">
+                        <i class="bi bi-trash3"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modalEditar{{ cliente.id_cliente }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content shadow">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><i class="bi bi-pencil-square me-2"></i>Editar Cliente</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ url_for('editar_cliente', id=cliente.id_cliente) }}" method="POST">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">Nombre Completo</label>
+                                <input type="text" name="nombre" class="form-control" value="{{ cliente.nombre }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">Cédula</label>
+                                <input type="text" name="cedula" class="form-control" value="{{ cliente.cedula }}" 
+                                       oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 mb-3">
+                                    <label class="form-label small fw-bold">Teléfono</label>
+                                    <input type="text" name="telefono" class="form-control" value="{{ cliente.telefono }}" 
+                                           oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <label class="form-label small fw-bold">Correo</label>
+                                    <input type="email" name="correo" class="form-control" value="{{ cliente.correo }}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer border-0">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary" style="background-color: var(--azul-elegante);">Guardar Cambios</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+function filtrarClientes() {
+    let input = document.getElementById('busquedaCliente').value.toLowerCase();
+    let tarjetas = document.getElementsByClassName('item-cliente');
+    for (let i = 0; i < tarjetas.length; i++) {
+        let nombre = tarjetas[i].querySelector('.nombre-cliente').innerText.toLowerCase();
+        let cedula = tarjetas[i].querySelector('.cedula-cliente').innerText.toLowerCase();
+        tarjetas[i].style.display = (nombre.includes(input) || cedula.includes(input)) ? "" : "none";
+    }
+}
+</script>
+
+{% endblock %}
