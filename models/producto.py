@@ -9,7 +9,6 @@ class Producto:
         self._nombre = nombre
         self._cantidad = cantidad
         self._precio = precio
-        # Nuevos atributos para relaciones
         self._id_categoria = id_categoria
         self._id_proveedor = id_proveedor
 

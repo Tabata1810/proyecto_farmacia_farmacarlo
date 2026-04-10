@@ -6,8 +6,6 @@ class ProductoService:
         db = obtener_conexion()
         if db:
             cursor = db.cursor(dictionary=True)
-            # Ajustado a tus columnas reales: 'id' e 'id_categoria'
-            # Quitamos el JOIN de proveedores porque no tienes esa columna en productos_mysql
             query = """
                 SELECT p.id AS id_producto, p.nombre, p.cantidad, p.precio, 
                        c.nombre_categoria
@@ -26,7 +24,6 @@ class ProductoService:
         db = obtener_conexion()
         if db:
             cursor = db.cursor()
-            # Quitamos id_proveedor de la insercion porque no existe en tu tabla
             query = """
                 INSERT INTO productos_mysql (nombre, cantidad, precio, id_categoria) 
                 VALUES (%s, %s, %s, %s)
@@ -43,7 +40,6 @@ class ProductoService:
         db = obtener_conexion()
         if db:
             cursor = db.cursor()
-            # Usamos 'id' que es como se llama en tu tabla
             query = "DELETE FROM productos_mysql WHERE id = %s"
             cursor.execute(query, (id_producto,))
             db.commit()
@@ -57,7 +53,6 @@ class ProductoService:
         db = obtener_conexion()
         if db:
             cursor = db.cursor()
-            # Ajustado: id_categoria es tu ultima columna, y la llave es 'id'
             query = """
                 UPDATE productos_mysql 
                 SET nombre=%s, cantidad=%s, precio=%s, id_categoria=%s 

@@ -1,7 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, send_file
+from flask import Flask, render_template, request, redirect, url_for, flash, send_file, session
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
+from fpdf import FPDF
+from datetime import datetime
 
 from Conexion.conexion import obtener_conexion 
 from services.producto_service import ProductoService
@@ -14,6 +16,8 @@ app.config['SECRET_KEY'] = 'clave_secreta_farmacarlo_2024'
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
+
+login_manager.login_message = "🔒 Por favor, inicia sesión para acceder a esta página."
 
 # Clase de Usuario para Flask-Login
 class Usuario(UserMixin):
@@ -124,7 +128,6 @@ def manejar_datos():
         id_categoria = request.form.get('id_categoria')
         id_proveedor = request.form.get('id_proveedor')
         
-        # Validamos e insertamos
         if ProductoForm(nombre, cantidad, precio, id_categoria, id_proveedor).validar():
             ProductoService.insertar(nombre, cantidad, precio, id_categoria, id_proveedor)
             flash("✅ Producto registrado", "success")
@@ -232,7 +235,6 @@ def editar_cliente(id):
             conn.close()
         return redirect(url_for('manejar_clientes'))
 
-    # Para mostrar los datos actuales en el formulario de edición
     cursor.execute("SELECT * FROM clientes WHERE id_cliente = %s", (id,))
     cliente = cursor.fetchone()
     cursor.close()
@@ -292,14 +294,13 @@ def editar_proveedor(id):
     cursor = conn.cursor(dictionary=True)
 
     if request.method == 'POST':
-        # Recogemos los datos nuevos del formulario
+
         empresa = request.form.get('empresa')
         nombre = request.form.get('nombre')
         telefono = request.form.get('telefono')
         correo = request.form.get('correo')
         direccion = request.form.get('direccion')
 
-        # Actualizamos en la base de datos
         sql = """
             UPDATE proveedores 
             SET nombre_empresa=%s, contacto_vendedor=%s, telefono_proveedor=%s, correo=%s, direccion=%s 
@@ -330,36 +331,64 @@ def editar_proveedor(id):
 def manejar_ventas():
     conn = obtener_conexion()
     cursor = conn.cursor(dictionary=True)
+    hoy = datetime.now().date()
+
+    if 'carrito' not in session:
+        session['carrito'] = []
+
     if request.method == 'POST':
-        id_cliente = request.form.get('id_cliente')
-        id_producto = request.form.get('id_producto')
-        cantidad = int(request.form.get('cantidad'))
-        descuento = float(request.form.get('descuento'))
-        try:
-            cursor.execute("SELECT precio FROM productos_mysql WHERE id = %s", (id_producto,))
-            prod = cursor.fetchone()
-            if prod:
-                precio_unitario = float(prod['precio'])
-                total = (precio_unitario * cantidad) - (precio_unitario * cantidad * (descuento / 100))
-                query_venta = "INSERT INTO ventas (id_cliente,total,fecha) VALUES (%s,%s,NOW())"
-                cursor.execute(query_venta,(id_cliente,total))
+        accion = request.form.get('accion')
+        
+        if accion == 'agregar':
+            id_p = request.form.get('id_producto')
+            cant = int(request.form.get('cantidad', 1))
+            
+            cursor.execute("SELECT nombre, precio FROM productos_mysql WHERE id = %s", (id_p,))
+            p = cursor.fetchone()
+            if p:
+                precio_original = float(p['precio'])
+                subtotal = precio_original * cant
+                
+                session['carrito'].append({
+                    'id': id_p, 
+                    'nombre': p['nombre'], 
+                    'cantidad': cant, 
+                    'precio': precio_original,
+                    'subtotal': subtotal
+                })
+                session.modified = True
+        
+        elif accion == 'finalizar':
+            id_c = request.form.get('id_cliente')
+            if session['carrito'] and id_c:
+                total_v = sum(item['subtotal'] for item in session['carrito'])
+                cursor.execute("INSERT INTO ventas (id_cliente, total, fecha) VALUES (%s, %s, NOW())", (id_c, total_v))
+                id_v = cursor.lastrowid
+                for item in session['carrito']:
+                    cursor.execute("""
+                        INSERT INTO detalle_ventas (id_venta, id_producto, cantidad, precio_unitario, subtotal) 
+                        VALUES (%s,%s,%s,%s,%s)
+                    """, (id_v, item['id'], item['cantidad'], item['precio'], item['subtotal']))
                 conn.commit()
-                flash(f"✅ Venta procesada por ${total:.2f}","success")
-            else:
-                flash("❌ Producto no encontrado","danger")
-        except Exception as e:
-            flash(f"❌ Error al procesar venta: {str(e)}","danger")
+                session.pop('carrito', None)
+                flash("✅ Venta registrada con éxito", "success")
+        
+        elif accion == 'limpiar':
+            session.pop('carrito', None)
         return redirect(url_for('manejar_ventas'))
-    
-    cursor.execute("SELECT v.*, c.nombre as cliente_nombre FROM ventas v JOIN clientes c ON v.id_cliente = c.id_cliente ORDER BY v.fecha DESC")
-    ventas = cursor.fetchall()
-    cursor.execute("SELECT id_cliente,nombre FROM clientes")
+
+    cursor.execute("SELECT v.id_venta, c.nombre as cliente_nombre, v.total, v.fecha FROM ventas v JOIN clientes c ON v.id_cliente = c.id_cliente WHERE DATE(v.fecha) = %s ORDER BY v.fecha DESC", (hoy,))
+    lista_ventas = cursor.fetchall()
+    for v in lista_ventas:
+        cursor.execute("SELECT p.nombre as producto_nombre, dv.cantidad, dv.precio_unitario as precio FROM detalle_ventas dv JOIN productos_mysql p ON dv.id_producto = p.id WHERE dv.id_venta = %s", (v['id_venta'],))
+        v['detalles'] = cursor.fetchall()
+    cursor.execute("SELECT id_cliente, nombre FROM clientes")
     clientes = cursor.fetchall()
-    cursor.execute("SELECT id,nombre,precio FROM productos_mysql")
+    cursor.execute("SELECT id, nombre, precio FROM productos_mysql")
     productos = cursor.fetchall()
     cursor.close()
     conn.close()
-    return render_template('ventas.html', lista_ventas=ventas, clientes=clientes, productos=productos, usuario=current_user)
+    return render_template('ventas.html', lista_ventas=lista_ventas, clientes=clientes, productos=productos, carrito=session.get('carrito', []))
 
 # REPORTES 
 
@@ -372,6 +401,36 @@ def reporte_pdf():
     except Exception as e:
         flash(f"Error al generar el PDF: {str(e)}","danger")
         return redirect(url_for('manejar_datos'))
+
+@app.route('/descargar_reporte_pdf')
+@login_required
+def descargar_reporte_ventas():
+    try:
+
+        conn = obtener_conexion()
+        cursor = conn.cursor(dictionary=True)
+        hoy = datetime.now().date()
+
+        query = """
+            SELECT v.id_venta, c.nombre as cliente, v.total, v.fecha,
+                   p.nombre as producto, dv.cantidad, dv.precio_unitario
+            FROM ventas v
+            JOIN clientes c ON v.id_cliente = c.id_cliente
+            JOIN detalle_ventas dv ON v.id_venta = dv.id_venta
+            JOIN productos_mysql p ON dv.id_producto = p.id
+            WHERE DATE(v.fecha) = %s
+        """
+        cursor.execute(query, (hoy,))
+        datos = cursor.fetchall()
+        
+        ruta_pdf = ReporteService.generar_pdf_ventas_hoy() 
+        
+        return send_file(ruta_pdf, as_attachment=True)
+        
+    except Exception as e:
+        print(f"Error en reporte de ventas: {e}")
+        flash(f"Error al generar reporte: {e}", "danger")
+        return redirect(url_for('manejar_ventas'))
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

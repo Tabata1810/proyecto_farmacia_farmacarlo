@@ -11,15 +11,12 @@ class ProductoForm:
         Verificación de integridad de datos del formulario
         """
         try:
-            # Comprobar campos obligatorios
             if not self.nombre or len(self.nombre.strip()) == 0:
                 return False
             
-            # Validación de rangos numéricos
             if float(self.precio) <= 0 or int(self.cantidad) < 0:
                 return False
             
-            # Validar que se haya seleccionado categoría y proveedor (opcional pero recomendado)
             if not self.id_categoria or not self.id_proveedor:
                 return False
                 
